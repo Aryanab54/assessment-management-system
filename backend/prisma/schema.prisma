@@ -1,0 +1,95 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int       @id @default(autoincrement())
+  name        String
+  email       String    @unique
+  password    String
+  role        Role      @default(AGENT)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  leads        Lead[]              @relation("AssignedLeads")
+  uploadedLeads Lead[]             @relation("UploadedLeads")
+  distributions Distribution[]
+  pdfReports    PdfReport[]
+  uploadHistory UploadHistory[]
+}
+
+model Lead {
+  id          Int        @id @default(autoincrement())
+  fullName    String
+  email       String?
+  phone       String?
+  address     String?
+  status      LeadStatus @default(NEW)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  // Relations
+  assignedTo   User?       @relation("AssignedLeads", fields: [assignedToId], references: [id])
+  assignedToId Int?
+  uploadedBy   User?       @relation("UploadedLeads", fields: [uploadedById], references: [id])
+  uploadedById Int?
+  distributions Distribution[]
+}
+
+model UploadHistory {
+  id          Int       @id @default(autoincrement())
+  fileName    String
+  filePath    String
+  uploadedAt  DateTime  @default(now())
+
+  // Relations
+  uploadedBy  User      @relation(fields: [uploadedById], references: [id])
+  uploadedById Int
+}
+
+model Distribution {
+  id            Int       @id @default(autoincrement())
+  distributedAt DateTime  @default(now())
+
+  // Relations
+  leadId  Int
+  agentId Int
+  lead    Lead @relation(fields: [leadId], references: [id])
+  agent   User @relation(fields: [agentId], references: [id])
+}
+
+model PdfReport {
+  id         Int      @id @default(autoincrement())
+  reportName String
+  filePath   String
+  createdAt  DateTime @default(now())
+
+  // Relations
+  createdBy   User @relation(fields: [createdById], references: [id])
+  createdById Int
+}
+
+enum Role {
+  ADMIN
+  AGENT
+}
+
+enum LeadStatus {
+  NEW
+  ASSIGNED
+  CONTACTED
+  CLOSED
+}

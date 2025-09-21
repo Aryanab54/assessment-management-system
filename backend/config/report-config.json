@@ -1,0 +1,63 @@
+{
+  "as_hr_02": {
+    "name": "Health & Fitness Assessment",
+    "sections": [
+      "Key Body Vitals",
+      "Heart Health", 
+      "Stress Level",
+      "Fitness Levels",
+      "Posture",
+      "Body Composition"
+    ],
+    "fieldMappings": {
+      "Overall Health Score": "accuracy",
+      "Heart Rate": "vitalsMap.vitals.heart_rate",
+      "Blood Pressure Systolic": "vitalsMap.vitals.bp_sys",
+      "Blood Pressure Diastolic": "vitalsMap.vitals.bp_dia",
+      "Oxygen Saturation": "vitalsMap.vitals.oxy_sat_prcnt",
+      "Respiratory Rate": "vitalsMap.vitals.resp_rate",
+      "Wellness Score": "vitalsMap.wellness_score",
+      "Stress Index": "vitalsMap.metadata.heart_scores.stress_index",
+      "BMI": "bodyCompositionData.BMI",
+      "Body Fat": "bodyCompositionData.BFC",
+      "Lean Mass": "bodyCompositionData.LM",
+      "BMR": "bodyCompositionData.BMR"
+    },
+    "classifications": {
+      "Heart Rate": {
+        "Low": [0, 60],
+        "Normal": [60, 100],
+        "High": [100, 200]
+      },
+      "BMI": {
+        "Underweight": [0, 18.5],
+        "Normal": [18.5, 25],
+        "Overweight": [25, 30],
+        "Obese": [30, 50]
+      }
+    }
+  },
+  "as_card_01": {
+    "name": "Cardiac Assessment",
+    "sections": [
+      "Key Body Vitals",
+      "Cardiovascular Endurance",
+      "Body Composition"
+    ],
+    "fieldMappings": {
+      "Overall Health Score": "accuracy",
+      "Heart Rate": "vitalsMap.vitals.heart_rate",
+      "Blood Pressure Systolic": "vitalsMap.vitals.bp_sys",
+      "Blood Pressure Diastolic": "vitalsMap.vitals.bp_dia",
+      "BMI": "bodyCompositionData.BMI",
+      "Cardiovascular Endurance": "exercises[2].setList[0].time"
+    },
+    "classifications": {
+      "Heart Rate": {
+        "Low": [0, 60],
+        "Normal": [60, 100],
+        "High": [100, 200]
+      }
+    }
+  }
+}
